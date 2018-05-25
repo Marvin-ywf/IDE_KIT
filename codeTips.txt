@@ -1,5 +1,5 @@
-//Windows使用回车和换行两个字符来结束一行，而Mac和Linux只使用换行一个字符
-//提交代码时自动地把行结束符CRLF转换成LF，而在检出代码时把LF转换成CRLF
+Windows使用回车和换行两个字符来结束一行，而Mac和Linux只使用换行一个字符
+提交代码时自动地把行结束符CRLF转换成LF，而在检出代码时把LF转换成CRLF
 $ git config --global core.autocrlf true
 
 我的建议：在Mac上设置 autocrlf = input, 在Windows上设置autocrlf = true（默认值）。

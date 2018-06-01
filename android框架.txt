@@ -1,0 +1,2 @@
+动态权限申请框架
+PermissionsDispatcher easypermissions(google) RxPermissions

@@ -1,6 +1,0 @@
-动态权限申请框架
-PermissionsDispatcher easypermissions(google) RxPermissions
-
-18/6/5--18/6/10
-近期对Kotlin的学习，以及对android各大框架的进一步熟悉。
-对此次android 开发者大会上的新特性进行学习。

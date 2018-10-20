@@ -1,26 +1,26 @@
-Windowsʹ�ûس��ͻ��������ַ�������һ�У���Mac��Linuxֻʹ�û���һ���ַ�
-�ύ����ʱ�Զ��ذ��н�����CRLFת����LF�����ڼ������ʱ��LFת����CRLF
+Windows使用回车和换行两个字符来结束一行，而Mac和Linux只使用换行一个字符
+提交代码时自动地把行结束符CRLF转换成LF，而在检出代码时把LF转换成CRLF
 $ git config --global core.autocrlf true
 
-�ҵĽ��飺��Mac������ autocrlf = input, ��Windows������autocrlf = true��Ĭ��ֵ����
+我的建议：在Mac上设置 autocrlf = input, 在Windows上设置autocrlf = true（默认值）。
 
 ----------------------------------------------------------------------------------------------------------------------------------
 
-�����Ļ���
+这样的话，
 
-Windows����true��
+Windows：（true）
 
-�ύʱ����CRLF ת�� LF���ύ��
+提交时，将CRLF 转成 LF再提交；
 
-�г�ʱ���Զ���LF תΪ CRLF;
+切出时，自动将LF 转为 CRLF;
 
 
 MAC/Linux: (input)
 
-�ύʱ,   ��CRLF ת�� LF���ύ��
+提交时,   将CRLF 转成 LF再提交；
 
-�г�ʱ������LF����
+切出时，保持LF即可
 
-�������ɱ�֤�ֿ�����Զ����LF. ������Windows�����ռ䶼��CRLF, ��Mac/Linux�����ռ䶼��LF.
+这样即可保证仓库中永远都是LF. 而且在Windows工作空间都是CRLF, 在Mac/Linux工作空间都是LF.
 
 ----------------------------------------------------------------------------------------------------------------------------------

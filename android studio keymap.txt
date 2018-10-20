@@ -1,7 +1,0 @@
-shift+shift 全局查找
-ctrl+n 查找类
-ctrl+shift+n 查找文件
-ctrl+F12 显示类中所有方法
-ctrl+alt+o 删除无效包
-
-F2 定位到错误地点

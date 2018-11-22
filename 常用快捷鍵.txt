@@ -100,3 +100,6 @@ ctrl+alt+c
 抽取成员变量
 ctrl+alt+f
 抽取成为函数入参
+
+抽取函数
+ctrl+alt+m

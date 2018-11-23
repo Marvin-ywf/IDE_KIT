@@ -4,6 +4,9 @@ shift+shift
 查找类
 ctrl+n
 
+查找近期文件
+ctrl+e
+
 查找文件
 ctrl+s
 

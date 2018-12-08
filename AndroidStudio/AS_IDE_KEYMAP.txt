@@ -1,3 +1,12 @@
+跳转父类
+ctrl+u
+
+跳转子类
+ctrl+shift+b
+
+跳转？类
+ctrl+shift+b
+
 全局查找
 shift+shift
 

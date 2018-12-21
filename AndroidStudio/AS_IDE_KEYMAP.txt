@@ -1,3 +1,12 @@
+编辑区全屏
+ctrl+shift+F12（全屏/缩小）
+
+IDE全屏
+alt+f（DIY ^ ^）
+
+返回编辑区
+ESC
+
 书签使用
 ctrl+F11（标记/删除）
 ctrl+num 书签跳转

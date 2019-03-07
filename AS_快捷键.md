@@ -71,4 +71,5 @@ get/set/...|ALT + Insert
 多光标选择|ALT + J
 多光标生成|CTRL + ALT + SHIFT + 左键
 后缀补全|变量 + .
+IDE剪切板|CTRL + SHIFT + INSERT
 

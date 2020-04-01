@@ -23,7 +23,7 @@
 * [CMK]()
 
 ## Multus cni
-[Multus CNI](#https://github.com/intel/multus-cni) is a container network interface (CNI) plugin for Kubernetes that enables attaching multiple network interfaces to pods. Typically, in Kubernetes each pod only has one network interface (apart from a loopback) -- with Multus you can create a multi-homed pod that has multiple interfaces. This is accomplished by Multus acting as a "meta-plugin", a CNI plugin that can call multiple other CNI plugins.
+[Multus CNI](https://github.com/intel/multus-cni) is a container network interface (CNI) plugin for Kubernetes that enables attaching multiple network interfaces to pods. Typically, in Kubernetes each pod only has one network interface (apart from a loopback) -- with Multus you can create a multi-homed pod that has multiple interfaces. This is accomplished by Multus acting as a "meta-plugin", a CNI plugin that can call multiple other CNI plugins.
 
 ### Define custom resource definition
 
@@ -32,7 +32,7 @@
 ---
 ##### Overview
 
-With bridge plugin, all containers (on the same host) are plugged into a bridge (virtual switch) that resides in the host network namespace. Please refer to [the bridge cni](#https://github.com/containernetworking/plugins/tree/master/plugins/main/bridge) for details.
+With bridge plugin, all containers (on the same host) are plugged into a bridge (virtual switch) that resides in the host network namespace. Please refer to [the bridge cni](https://github.com/containernetworking/plugins/tree/master/plugins/main/bridge) for details.
 
 ##### Example configuration
 
@@ -77,7 +77,7 @@ NET
 
 macvlan functions like a switch that is already connected to the host interface.
 A host interface gets "enslaved" with the virtual interfaces sharing the physical device but having distinct MAC addresses.
-Please refer to [the macvlan cni](#https://github.com/containernetworking/plugins/tree/master/plugins/main/macvlan) for details.
+Please refer to [the macvlan cni](https://github.com/containernetworking/plugins/tree/master/plugins/main/macvlan) for details.
 
 ##### Example configuration
 
@@ -115,7 +115,7 @@ NET
 
 ##### Overview
 
-ipvlan is a new addition to the Linux kernel. It virtualizes the host interface. Please refer to [the ipvlan cni](#https://github.com/containernetworking/plugins/tree/master/plugins/main/ipvlan) for details.
+ipvlan is a new addition to the Linux kernel. It virtualizes the host interface. Please refer to [the ipvlan cni](https://github.com/containernetworking/plugins/tree/master/plugins/main/ipvlan) for details.
 
 ##### Example configuration
 
@@ -152,7 +152,7 @@ NET
 ---
 ##### Overview
 The ptp plugin creates a point-to-point link between a container and the host by using a veth device.
-Please refer to [the ptp cni](#https://github.com/containernetworking/plugins/tree/master/plugins/main/ptp) for details.
+Please refer to [the ptp cni](https://github.com/containernetworking/plugins/tree/master/plugins/main/ptp) for details.
 
 ##### Example network configuration
 

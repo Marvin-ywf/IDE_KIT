@@ -1,7 +1,7 @@
 # Test case overview
 
 * [Multus-CNI](#Multus-CNI)
-    * [bridge plugin](#bridge plugin)
+    * [bridge plugin](#bridgeplugin)
     * [macvlan plugin]()
     * [ipvlan plugin]()
     * [ptp plugin]()

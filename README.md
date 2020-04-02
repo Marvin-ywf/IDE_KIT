@@ -9,12 +9,11 @@
     2. [Create a pod with the previously CRD annotation](#Create-a-pod-with-the-previously-CRD-annotation)
     3. [Verify the additional interface was configured](#Verify-the-additional-interface-was-configured)
 * [SRIOV plugin](#SRIOV-plugin)
-    1. [define SRIOV network CRD]()
-        * [sriov cni](#sriov-cni)
-    2. [Create a pod with single/multiple VF interface]()
-        * [single VF allocated]()
-        * [multiple VF allocated]()
-    3. [Verify the VF interface was allocated](#)
+    1. [define SRIOV network CRD](#define-SRIOV-network-CRD)
+    2. [Create a pod with single/multiple VF interface](#Create-a-pod-with single/multiple-VF-interface)
+        * [single VF allocated](#single-VF-allocated)
+        * [multiple VF allocated](#multiple-VF-allocated)
+    3. [Verify the VF interface was allocated](#Verify-the-VF-interface-was-allocated)
 * [NFD](#NFD)
     1. [Create a pod to run on particular node](#Create-a-pod-to-run-on-particular-node)
         * [nodeSelector](#nodeSelector)
@@ -37,7 +36,7 @@ With bridge plugin, all containers (on the same host) are plugged into a bridge 
 ##### Example configuration
 
 ```
-    cat << NET > bridge-network.yaml
+    cat << NET | kubectl apply -f -
 apiVersion: "k8s.cni.cncf.io/v1"
 kind: NetworkAttachmentDefinition
 metadata:
@@ -82,7 +81,7 @@ Please refer to [the macvlan cni](https://github.com/containernetworking/plugins
 ##### Example configuration
 
 ```
-    cat << NET > macvlan-network.yaml
+    cat << NET  | kubectl apply -f -
 apiVersion: "k8s.cni.cncf.io/v1"
 kind: NetworkAttachmentDefinition
 metadata:
@@ -120,7 +119,7 @@ ipvlan is a new addition to the Linux kernel. It virtualizes the host interface.
 ##### Example configuration
 
 ```
-    cat << NET > ipvlan-network.yaml
+    cat << NET  | kubectl apply -f -
 apiVersion: "k8s.cni.cncf.io/v1"
 kind: NetworkAttachmentDefinition
 metadata:
@@ -157,7 +156,7 @@ Please refer to [the ptp cni](https://github.com/containernetworking/plugins/tre
 ##### Example network configuration
 
 ```
-    cat << NET > ptp-network.yaml
+    cat << NET  | kubectl apply -f -
 apiVersion: "k8s.cni.cncf.io/v1"
 kind: NetworkAttachmentDefinition
 metadata:
@@ -185,7 +184,7 @@ NET
 
 #### Create a pod with the previously CRD annotation
 ```
-    cat << DEPLOYMENT > $multus_deployment_name.yaml | kubectl create -f $multus_deployment_name.yaml
+    cat << DEPLOYMENT | kubectl create -f -
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -202,7 +201,7 @@ spec:
       labels:
         app: multus
       annotations:
-        k8s.v1.cni.cncf.io/networks: ${cni}-conf
+        k8s.v1.cni.cncf.io/networks: bridge-conf
     spec:
       containers:
       - name: $multus_deployment_name
@@ -212,6 +211,37 @@ spec:
         tty: true
 DEPLOYMENT
 ```
+> You can add more interfaces to a pod by creating more custom resources and then referring to them in pod's annotation. You can also reuse configurations, so for example, to attach a bridge interface and a macvlan interface to a pod, you could create a pod like so:
+```
+    cat << DEPLOYMENT | kubectl create -f -
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: $multus_deployment_name
+  labels:
+    app: multus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: multus
+  template:
+    metadata:
+      labels:
+        app: multus
+      annotations:
+        k8s.v1.cni.cncf.io/networks: bridge-conf, macvlan-conf
+    spec:
+      containers:
+      - name: $multus_deployment_name
+        image: "busybox"
+        command: ["top"]
+        stdin: true
+        tty: true
+DEPLOYMENT
+```
+> Note that the annotation now reads k8s.v1.cni.cncf.io/networks: bridge-conf, macvlan-conf. Where we have the same configuration used twice, separated by a comma.
+ If you were to create another custom resource with the name foo you could use that such as: k8s.v1.cni.cncf.io/networks: foo,macvlan-conf, and use any number of attachments.
 
 #### Verify the additional interface was configured
 We can Verify the additional interface by running command as shown below.
@@ -234,20 +264,15 @@ The output should looks like the following.
     inet 10.20.0.12/16 scope global net1
        valid_lft forever preferred_lft forever
 ```
+You should note that a new interface named `net1` is attached.
+>For further test information please refer to the file `./multus.sh`.
 
 ## SRIOV plugin
 
-#### sriov cni
 
----
+### define SRIOV network CRD
 
-##### Overview
-
-Some CNI plugins require specific device information which maybe pre-allocated by K8s device plugin. This could be indicated by providing `k8s.v1.cni.cncf.io/resourceName` annotaton in its network attachment definition CRD. The file [`examples/sriov-net.yaml`](./sriov-net.yaml) shows an example on how to define a Network attachment definition with specific device allocation information. Multus will get allocated device information and make them available for CNI plugin to work on.
-
-In this exmaple (shown below), it is expected that an [SRIOV Device Plugin](https://github.com/intel/sriov-network-device-plugin/) making a pool of SRIOV VFs available to the K8s with `intel.com/sriov_700` as their resourceName. Any device allocated from this resource pool will be passed down by Multus to the [sriov-cni](https://github.com/intel/sriov-cni/tree/dev/k8s-deviceid-model) plugin in `deviceID` field. This is up to the sriov-cni plugin to capture this information and work with this specific device information.
-
-##### Example network configuration
+##### Example CRD configuration
 
 ```
 apiVersion: "k8s.cni.cncf.io/v1"
@@ -270,9 +295,79 @@ spec:
     }
   }'
 ```
->For further information on how to configure SRIOV Device Plugin and SRIOV-CNI please refer to the links given above.
+### Create a pod with single/multiple VF interface
 
+#### single VF allocated
+```
+cat << POD | kubectl create -f - --validate=false
+apiVersion: v1
+kind: Pod
+metadata:
+  name: $deployment_pod
+  annotations:
+    k8s.v1.cni.cncf.io/networks: sriov-conf
+spec:
+  containers:
+  - name: test-pod
+    image: docker.io/centos/tools:latest
+    command:
+    - /sbin/init
+    resources:
+      requests:
+        intel.com/intel_sriov_700: '1'
+      limits:
+        intel.com/intel_sriov_700: '1'
+POD
+```
+#### multiple VF allocated
+```
+cat << POD | kubectl create -f - --validate=false
+apiVersion: v1
+kind: Pod
+metadata:
+  name: $deployment_pod
+  annotations:
+    k8s.v1.cni.cncf.io/networks: sriov-conf, sriov-conf
+spec:
+  containers:
+  - name: test-pod
+    image: docker.io/centos/tools:latest
+    command:
+    - /sbin/init
+    resources:
+      requests:
+        intel.com/intel_sriov_700: '2'
+      limits:
+        intel.com/intel_sriov_700: '2'
+POD
+```
 
+### Verify the VF interface was allocated
+
+We can Verify the additional VF interface by running command as shown below.
+```
+kubectl exec -it $deployment_pod -- ip a
+```
+The output should looks like the following.
+```
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+3: eth0@if429: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1450 qdisc noqueue state UP group default
+    link/ether 0a:58:0a:f4:40:09 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+    inet 10.244.64.9/24 scope global eth0
+       valid_lft forever preferred_lft forever
+413: net2: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc mq state DOWN group default qlen 1000
+    link/ether 36:57:78:8b:e1:3b brd ff:ff:ff:ff:ff:ff
+    inet 10.56.206.4/24 brd 10.56.206.255 scope global net2
+       valid_lft forever preferred_lft forever
+414: net1: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc mq state DOWN group default qlen 1000
+    link/ether de:d0:73:53:08:66 brd ff:ff:ff:ff:ff:ff
+    inet 10.56.206.3/24 brd 10.56.206.255 scope global net1
+       valid_lft forever preferred_lft forever
+```
+>For further test information please refer to the file `./sriov.sh`.
 
 ## NFD
 
@@ -280,7 +375,7 @@ node feature discovery([NFD](https://github.com/kubernetes-sigs/node-feature-dis
 ### Create a pod to run on particular node
 #### nodeSelector
 `nodeSelector` is a field of PodSpec. It specifies a map of key-value pairs. For the pod to be eligible to run on a node, the node must have each of the indicated key-value pairs as labels (it can have additional labels as well). The most common usage is one key-value pair. 
-##### pod configuration with `nodeSelector`
+##### To create pod configuration with `nodeSelector`
 ```
 cat << POD > $HOME/$pod_name.yaml | kubectl create -f $HOME/$pod_name.yaml
 apiVersion: v1
@@ -298,7 +393,7 @@ POD
 #### node affinity
 `nodeAffinity` is conceptually similar to `nodeSelector` – it allows you to constrain which nodes your pod is eligible to be scheduled on, based on labels on the node.
 
-##### pod configuration with `nodeAffinity`
+##### To create pod configuration with `nodeAffinity`
 ```
 cat << POD > $HOME/$pod_name.yaml | kubectl create -f $HOME/$pod_name.yaml
 apiVersion: v1

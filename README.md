@@ -1,5 +1,8 @@
-# Test case overview
+# Kud test case
+## Summary
+This folder contains all the AddOn test script file here. Most of those test scripts can be executed simply by `bash <script-name>`.
 
+## Table of contents
 * [Multus CNI](#Multus-CNI)
     1. [define the additional network custom resource definition(CRD)](#Define-custom-resource-definition)
         * [bridge CNI](#bridge-CNI)
@@ -25,7 +28,6 @@
 [Multus CNI](https://github.com/intel/multus-cni) is a container network interface (CNI) plugin for Kubernetes that enables attaching multiple network interfaces to pods. Typically, in Kubernetes each pod only has one network interface (apart from a loopback) -- with Multus you can create a multi-homed pod that has multiple interfaces. This is accomplished by Multus acting as a "meta-plugin", a CNI plugin that can call multiple other CNI plugins.
 
 ### Define custom resource definition
-
 #### bridge CNI
 
 ---

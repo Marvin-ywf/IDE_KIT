@@ -1,11 +1,11 @@
 # Test case overview
 
-* [Multus cni](#Multus-cni)
+* [Multus CNI](#Multus-CNI)
     1. [define the additional network custom resource definition(CRD)](#Define-custom-resource-definition)
-        * [bridge cni](#bridge-cni)
-        * [macvlan cni](#macvlan-cni)
-        * [ipvlan cni](#ipvlan-cni)
-        * [ptp cni](#ptp-cni)
+        * [bridge CNI](#bridge-CNI)
+        * [macvlan CNI](#macvlan-CNI)
+        * [ipvlan CNI](#ipvlan-CNI)
+        * [ptp CNI](#ptp-CNI)
     2. [Create a pod with the previously CRD annotation](#Create-a-pod-with-the-previously-CRD-annotation)
     3. [Verify the additional interface was configured](#Verify-the-additional-interface-was-configured)
 * [SRIOV plugin](#SRIOV-plugin)
@@ -21,12 +21,12 @@
     2. [Verify pod created status](#Verify-pod-created-status)
 * [CMK](#)
 
-## Multus cni
+## Multus CNI
 [Multus CNI](https://github.com/intel/multus-cni) is a container network interface (CNI) plugin for Kubernetes that enables attaching multiple network interfaces to pods. Typically, in Kubernetes each pod only has one network interface (apart from a loopback) -- with Multus you can create a multi-homed pod that has multiple interfaces. This is accomplished by Multus acting as a "meta-plugin", a CNI plugin that can call multiple other CNI plugins.
 
 ### Define custom resource definition
 
-#### bridge cni
+#### bridge CNI
 
 ---
 ##### Overview
@@ -68,7 +68,7 @@ NET
 * `promiscMode` (boolean, optional): set promiscuous mode on the bridge. Defaults to false.
 * `vlan` (int, optional): assign VLAN tag. Defaults to none.
 
-#### macvlan cni
+#### macvlan CNI
 
 ---
 
@@ -108,7 +108,7 @@ NET
 * `mtu` (integer, optional): explicitly set MTU to the specified value. Defaults to the value chosen by the kernel. The value must be \[0, master's MTU\].
 * `ipam` (dictionary, required): IPAM configuration to be used for this network. For interface only without ip address, create empty dictionary.
 
-#### ipvlan cni
+#### ipvlan CNI
 
 ---
 
@@ -146,7 +146,7 @@ NET
 * `mtu` (integer, optional): explicitly set MTU to the specified value. Defaults to the value chosen by the kernel.
 * `ipam` (dictionary, required unless chained): IPAM configuration to be used for this network.
 
-#### ptp cni
+#### ptp CNI
 
 ---
 ##### Overview

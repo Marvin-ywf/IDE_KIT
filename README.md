@@ -265,7 +265,7 @@ The output should looks like the following.
        valid_lft forever preferred_lft forever
 ```
 You should note that a new interface named `net1` is attached.
->For further test information please refer to the file `./multus.sh`.
+>For further test information please refer to the file [`./multus.sh`](./multus.sh).
 
 ## SRIOV plugin
 
@@ -367,7 +367,7 @@ The output should looks like the following.
     inet 10.56.206.3/24 brd 10.56.206.255 scope global net1
        valid_lft forever preferred_lft forever
 ```
->For further test information please refer to the file `./sriov.sh`.
+>For further test information please refer to the file [`./sriov.sh`](./sriov.sh).
 
 ## NFD
 
@@ -415,7 +415,7 @@ spec:
     image: gcr.io/google_containers/pause:2.0
 POD
 ```
->For further information on how to configure nodeAffinity `operator` field please refer to the file `./nfd.sh`.
+>For further information on how to configure nodeAffinity `operator` field please refer to the file [`./nfd.sh`](./nfd.sh).
 
 ### Verify pod created status
 To Verify the nfd pod by running command as shown below.
